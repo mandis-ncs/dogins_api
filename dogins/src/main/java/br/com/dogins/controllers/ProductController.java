@@ -1,0 +1,28 @@
+package br.com.dogins.controllers;
+
+import br.com.dogins.models.Product;
+import br.com.dogins.services.ProductService;
+import org.bson.types.ObjectId;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/dogins")
+public class ProductController {
+
+    private ProductService service;
+
+    public ProductController(ProductService service) {
+        this.service = service;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Product> findById(@PathVariable ObjectId id) {
+        var response = service.findProductById(id);
+        return ResponseEntity.ok(response);
+    }
+
+}
