@@ -49,4 +49,7 @@ public class ProductController {
         return service.updateProductByFields(id,fields);
     }
 
+    // receber uma list com ids e qtde  para fazer o patch
+    // for each -> fzr o patch
+
 }
