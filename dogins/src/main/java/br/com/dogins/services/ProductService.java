@@ -5,6 +5,7 @@ import br.com.dogins.models.Product;
 import org.bson.types.ObjectId;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProductService {
     ProductResponseDto findProductById(String id);
@@ -13,6 +14,8 @@ public interface ProductService {
 
     Integer getProductQuantity(String id);
 
-    Integer patchProductQuantity(String id, Integer qtdToDelete);
+    String patchProductQuantity(String id, String qtdToDelete);
+
+    Product updateProductByFields(String id, Map<String, Object> fields);
 
 }

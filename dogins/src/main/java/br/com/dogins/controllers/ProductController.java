@@ -5,12 +5,10 @@ import br.com.dogins.models.Product;
 import br.com.dogins.services.ProductService;
 import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/dogins")
@@ -38,6 +36,17 @@ public class ProductController {
     public ResponseEntity<Integer> getProductQuantity(@PathVariable String id) {
         var response = service.getProductQuantity(id);
         return ResponseEntity.ok(response);
+    }
+
+//    @PatchMapping("/{id}")
+//    public ResponseEntity<String> patchProductQuantity(@PathVariable String id, String qtdToDelete) {
+//        String newQuantity = service.patchProductQuantity(id, qtdToDelete);
+//        return ResponseEntity.ok(newQuantity);
+//    }
+
+    @PatchMapping("/{id}")
+    public Product updateProductFields(@PathVariable String id,@RequestBody Map<String, Object> fields){
+        return service.updateProductByFields(id,fields);
     }
 
 }

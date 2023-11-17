@@ -1,21 +1,24 @@
 package br.com.dogins.services.Impl;
 
 import br.com.dogins.dto.response.ProductResponseDto;
+import br.com.dogins.exceptions.InvalidValue;
 import br.com.dogins.exceptions.ListIsEmptyException;
 import br.com.dogins.exceptions.ResourceNotFoundException;
 import br.com.dogins.models.Product;
 import br.com.dogins.repositories.ProductRepository;
 import br.com.dogins.services.ProductService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.types.ObjectId;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.util.ReflectionUtils;
+
+import java.lang.reflect.Field;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -86,7 +89,24 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Integer patchProductQuantity(String id, Integer qtdToDelete) {
+    public String patchProductQuantity(String id, String qtdToDelete) {
         return null;
     }
+
+
+    public Product updateProductByFields(String id, Map<String, Object> fields) {
+        Optional<Product> existingProduct = repository.findById(id);
+
+        if (existingProduct.isPresent()) {
+            fields.forEach((key, value) -> {
+                Field field = ReflectionUtils.findField(Product.class, key);
+                field.setAccessible(true);
+                ReflectionUtils.setField(field, existingProduct.get(), value);
+            });
+            return repository.save(existingProduct.get());
+        }
+        return null;
+    }
+
+
 }
