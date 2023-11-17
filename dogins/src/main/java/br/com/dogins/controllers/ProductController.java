@@ -34,4 +34,10 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/{id}/quantity")
+    public ResponseEntity<Integer> getProductQuantity(@PathVariable String id) {
+        var response = service.getProductQuantity(id);
+        return ResponseEntity.ok(response);
+    }
+
 }

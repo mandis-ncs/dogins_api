@@ -81,7 +81,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Integer getProductQuantity(String id) {
-        return null;
+        ProductResponseDto responseDto = findProductById(id);
+        return Integer.parseInt(String.valueOf(responseDto.getProductStock()));
     }
 
     @Override
