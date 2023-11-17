@@ -1,5 +1,6 @@
 package br.com.dogins.controllers;
 
+import br.com.dogins.dto.response.ProductResponseDto;
 import br.com.dogins.models.Product;
 import br.com.dogins.services.ProductService;
 import org.bson.types.ObjectId;
@@ -22,13 +23,13 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> findById(@PathVariable ObjectId id) {
+    public ResponseEntity<ProductResponseDto> findById(@PathVariable String id) {
         var response = service.findProductById(id);
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<List<Product>>
+//    @GetMapping("/{id}")
+//    public ResponseEntity<List<Product>>
 
 
 }

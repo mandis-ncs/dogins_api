@@ -2,12 +2,10 @@ package br.com.dogins.models;
 
 import lombok.*;
 import org.bson.types.Binary;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -19,7 +17,7 @@ import java.util.UUID;
 public class Product {
 
     @Id
-    private ObjectId id;
+    private String id;
 
     private String productCategory;
     private String universalProductCode;
@@ -31,8 +29,8 @@ public class Product {
     private String productPrice;
     private String productStock;
     private String size;
-    private String minStock;
-    private int amountSales;
+    private Integer minStock;
+    private Integer amountSales;
     private String productName;
     private List<String> productColors;
 
