@@ -40,10 +40,17 @@ public class ProductServiceImpl implements ProductService {
         productResponseDto.setProductDescription(product.get().getProductDescription());
         productResponseDto.setProductImages(product.get().getProductImages());
         productResponseDto.setBrandName(product.get().getBrandName());
-        productResponseDto.setProductPrice(product.get().getProductPrice());
-        productResponseDto.setProductStock(product.get().getProductStock());
         productResponseDto.setSize(product.get().getSize());
         productResponseDto.setProductName(product.get().getProductName());
+
+        //convert string price to double
+        String productPriceString = product.get().getProductPrice().replace(",", ".");
+        Double productPrice = Double.parseDouble(productPriceString);
+        productResponseDto.setProductPrice(productPrice);
+
+        productResponseDto.setProductStock(Integer.parseInt(product.get().getProductStock()));
+
+
         return productResponseDto;
     }
 
