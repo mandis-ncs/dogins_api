@@ -94,6 +94,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
+    @Override
     public Product updateProductByFields(String id, Map<String, Object> fields) {
         Optional<Product> existingProduct = repository.findById(id);
 

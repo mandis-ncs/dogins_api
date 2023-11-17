@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.myapplication.models.Product
+import com.example.myapplication.models.Update
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,28 +45,114 @@ class MainActivity : AppCompatActivity() {
 
     @Composable
     fun MyScreenContent() {
-        // Use Compose para definir a interface do usuário
+//        // Use Compose para definir a interface do usuário
+//        Button(onClick = {
+////            val id = "6435f268f8ac63da19379255"
+//            val call = ApiClient.apiService.findAll()
+//
+//            call.enqueue(object : Callback<List<Product>> {
+//                override fun onResponse(call: Call<Product>, response: Response<Product>) {
+//                    if (response.isSuccessful) {
+//                        val resBody = response.body()
+//                        Log.i("Respsta", resBody!!.brandName)
+//                    } else {
+//                        val error = response.errorBody()
+//                        Log.i("Erro", error.toString())
+//                    }
+//                }
+//
+//                override fun onFailure(call: Call<Product>, t: Throwable) {
+//                    Log.i("Catch ERRO", t.message ?: "Unknown error")
+//                }
+//            })
+//        }) {
+//            Text(text = "Botao")
+//        }
+
+//ta funfando legal
+//        Button(onClick = {
+//            //val id = "6435f268f8ac63da19379255"
+//            val call = ApiClient.apiService.findAll()
+//
+//            call.enqueue(object : Callback<List<Product>> {
+//                override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
+//                    if (response.isSuccessful) {
+//                        val resBody = response.body()
+//                        Log.i("Respsta", resBody.toString())
+//                    } else {
+//                        val error = response.errorBody()
+//                        Log.i("Erro", error.toString())
+//                    }
+//                }
+//
+//                override fun onFailure(call: Call<List<Product>>, t: Throwable) {
+//                    Log.i("Catch ERRO", t.message ?: "Unknown error")
+//                }
+//            })
+//        }) {
+//            Text(text = "Botao")
+//        }
+
         Button(onClick = {
-            val id = "6435f268f8ac63da19379255"
-            val call = ApiClient.apiService.findById(id)
+            //val id = "6435f268f8ac63da19379255"
+            val listProduto = listOf(Update(id = "6435f512f8ac63da19379257", productStock = "14"))
+            val call = ApiClient.apiService.updateProductFields(
+                fields = listProduto
+            )
+            listProduto.map { listaCarrinho-> Update(listaCarrinho.id,listaCarrinho.productStock ) }
+
+
+
+
+
+
+
+
+
 
             call.enqueue(object : Callback<Product> {
-                override fun onResponse(call: Call<Product>, response: Response<Product>) {
+                override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
                     if (response.isSuccessful) {
                         val resBody = response.body()
-                        Log.i("Respsta", resBody!!.brandName)
+                        Log.i("Respsta", resBody.toString())
                     } else {
                         val error = response.errorBody()
                         Log.i("Erro", error.toString())
                     }
                 }
 
-                override fun onFailure(call: Call<Product>, t: Throwable) {
+                override fun onFailure(call: Call<List<Product>>, t: Throwable) {
                     Log.i("Catch ERRO", t.message ?: "Unknown error")
                 }
             })
         }) {
             Text(text = "Botao")
         }
+
+//        Button(onClick = {
+//            val id = "6435f268f8ac63da19379255"
+//            val call = ApiClient.apiService.getProductQuantity(id)
+//
+//            call.enqueue(object : Callback<Int> {
+//                override fun onResponse(call: Call<Int>, response: Response<Int>) {
+//                    if (response.isSuccessful) {
+//                        Log.i("Respsta", response.toString())
+//                    } else {
+//                        val error = response.errorBody()
+//                        Log.i("Erro", error.toString())
+//                    }
+//                }
+//
+//                override fun onFailure(call: Call<Int>, t: Throwable) {
+//                    Log.i("Catch ERRO", t.message ?: "Unknown error")
+//                }
+//            })
+//        }) {
+//            Text(text = "Botao")
+//        }
+
+
     }
+
+
 }

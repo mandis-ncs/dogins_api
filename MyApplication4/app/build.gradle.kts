@@ -65,6 +65,11 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1") // Para converter JSON para objetos Kotlin
 
+    //mongodb
+    implementation("org.mongodb:bson:4.11.0")
+
+    //jackson
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.16.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
