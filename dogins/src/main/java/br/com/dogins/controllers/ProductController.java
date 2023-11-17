@@ -28,8 +28,10 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity<List<Product>>
-
+    @GetMapping
+    public ResponseEntity<List<ProductResponseDto>> findAll() {
+        var response = service.findAllProducts();
+        return ResponseEntity.ok(response);
+    }
 
 }

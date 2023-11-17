@@ -1,6 +1,7 @@
 package br.com.dogins.services.Impl;
 
 import br.com.dogins.dto.response.ProductResponseDto;
+import br.com.dogins.exceptions.ListIsEmptyException;
 import br.com.dogins.exceptions.ResourceNotFoundException;
 import br.com.dogins.models.Product;
 import br.com.dogins.repositories.ProductRepository;
@@ -12,6 +13,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +37,10 @@ public class ProductServiceImpl implements ProductService {
         if (product.isEmpty()) {
             throw new ResourceNotFoundException("This product id does not exist: " + id);
         }
+        return mapToProductResponseDto(product);
+    }
+
+    private ProductResponseDto mapToProductResponseDto(Optional<Product> product) {
         ProductResponseDto productResponseDto = new ProductResponseDto();
         productResponseDto.setId(product.get().getId());
         productResponseDto.setProductColor(product.get().getProductColor());
@@ -44,24 +51,32 @@ public class ProductServiceImpl implements ProductService {
         productResponseDto.setProductName(product.get().getProductName());
 
         //convert string price to double
-        String productPriceString = product.get().getProductPrice().replace(",", ".");
-        Double productPrice = Double.parseDouble(productPriceString);
-        productResponseDto.setProductPrice(productPrice);
-
+        productResponseDto.setProductPrice(convertStrToDouble(product.get().getProductPrice()));
         productResponseDto.setProductStock(Integer.parseInt(product.get().getProductStock()));
-
-
         return productResponseDto;
     }
 
-    @Override
-    public ProductResponseDto findCardInfoById(String id) {
-        return null;
+    private Double convertStrToDouble(String str) {
+        // Convert string to double, handling commas
+        String strWithoutComma = str.replace(",", ".");
+        return Double.parseDouble(strWithoutComma);
     }
 
+
     @Override
-    public List<Product> findAllProducts() {
-        return null;
+    public List<ProductResponseDto> findAllProducts() {
+        var productList = repository.findAll();
+        if (productList.isEmpty()) {
+            throw new ListIsEmptyException("No products found!");
+        }
+
+        List<ProductResponseDto> responseDtoList = new ArrayList<>();
+
+        for (Product product : productList) {
+            responseDtoList.add(mapToProductResponseDto(Optional.ofNullable(product)));
+        }
+
+        return responseDtoList;
     }
 
     @Override

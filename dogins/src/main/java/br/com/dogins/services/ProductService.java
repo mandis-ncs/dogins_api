@@ -9,9 +9,7 @@ import java.util.List;
 public interface ProductService {
     ProductResponseDto findProductById(String id);
 
-    ProductResponseDto findCardInfoById(String id); //Product Info to Shopping Cart
-
-    List<Product> findAllProducts();
+    List<ProductResponseDto> findAllProducts();
 
     Integer getProductQuantity(String id);
 
