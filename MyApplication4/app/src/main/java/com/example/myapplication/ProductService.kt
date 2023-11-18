@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import com.example.myapplication.models.Product
 import com.example.myapplication.models.Update
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -10,16 +11,16 @@ import retrofit2.http.Path
 
 interface ProductService {
 
-    @GET("/dogins/{id}")
+    @GET("/dogins/products/{id}")
     fun findById(@Path("id") id: String): Call<Product>
 
-    @GET("/dogins")
+    @GET("/dogins/products")
     fun findAll(): Call<List<Product>>
 
-    @GET("/dogins/{id}/quantity")
+    @GET("/dogins/products/{id}/quantity")
     fun getProductQuantity(@Path("id") id: String): Call<Int>
 
     //temporary patch
-    @PATCH("/dogins/{id}")
-    fun updateProductFields(@Body fields: List<Update>): Call<Product>
+    @PATCH("/dogins/products")
+    fun updateProductFields(@Body fields: List<Update>): Call<ResponseBody>
 }

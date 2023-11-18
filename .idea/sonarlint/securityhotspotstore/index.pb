@@ -11,3 +11,7 @@ u
 Edogins/src/main/java/br/com/dogins/controllers/ProductController.java,3\9\3936a71e6aa10f37ebaa083dfbd2410e836434e5
 f
 6dogins/src/main/java/br/com/dogins/models/Product.java,0\1\016eac160950378d81468482d919915e9b64a008
+w
+Gdogins/src/main/java/br/com/dogins/dto/response/ProductResponseDto.java,3\a\3a6bc272dc6b81d9189a483eae6585296f183dd0
+n
+>dogins/src/main/java/br/com/dogins/models/ProductToUpdate.java,7\a\7aa1844cc04c49b33a1a6e30de764851bae8d14c

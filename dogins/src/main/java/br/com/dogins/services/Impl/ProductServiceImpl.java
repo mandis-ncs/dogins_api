@@ -5,6 +5,7 @@ import br.com.dogins.exceptions.InvalidValue;
 import br.com.dogins.exceptions.ListIsEmptyException;
 import br.com.dogins.exceptions.ResourceNotFoundException;
 import br.com.dogins.models.Product;
+import br.com.dogins.models.ProductToUpdate;
 import br.com.dogins.repositories.ProductRepository;
 import br.com.dogins.services.ProductService;
 import lombok.extern.slf4j.Slf4j;
@@ -95,18 +96,8 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public Product updateProductByFields(String id, Map<String, Object> fields) {
-        Optional<Product> existingProduct = repository.findById(id);
+    public void updateProductByFields(List<ProductToUpdate> productToUpdateList) {
 
-        if (existingProduct.isPresent()) {
-            fields.forEach((key, value) -> {
-                Field field = ReflectionUtils.findField(Product.class, key);
-                field.setAccessible(true);
-                ReflectionUtils.setField(field, existingProduct.get(), value);
-            });
-            return repository.save(existingProduct.get());
-        }
-        return null;
     }
 
 

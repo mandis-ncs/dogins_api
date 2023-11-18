@@ -70,6 +70,8 @@ dependencies {
 
     //jackson
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.16.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

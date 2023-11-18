@@ -2,6 +2,7 @@ package br.com.dogins.services;
 
 import br.com.dogins.dto.response.ProductResponseDto;
 import br.com.dogins.models.Product;
+import br.com.dogins.models.ProductToUpdate;
 import org.bson.types.ObjectId;
 
 import java.util.List;
@@ -16,6 +17,6 @@ public interface ProductService {
 
     String patchProductQuantity(String id, String qtdToDelete);
 
-    Product updateProductByFields(String id, Map<String, Object> fields);
+    void updateProductByFields(List<ProductToUpdate> productToUpdateList);
 
 }
