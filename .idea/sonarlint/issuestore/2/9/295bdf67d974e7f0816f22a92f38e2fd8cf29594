@@ -1,8 +1,16 @@
 
 v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ğ®—²8ƒ›§ü½1
 k
-java:S36551"NCall "product.isPresent()" or "!product.isEmpty()" before accessing the value.(»û„é8™›§ü½1
+java:S36551"NCall "product.isPresent()" or "!product.isEmpty()" before accessing the value.(»û„é8²¨¿Ÿ¿1
 
 java:S1186c"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(œ‡Ë¹8óÇ©ü½1
+d
+java:S1128"BRemove this unused import 'br.com.dogins.exceptions.InvalidValue'.(ã’ÏËıÿÿÿÿ8úª¿Ÿ¿1
+b
+java:S1128"ERemove this unused import 'org.springframework.util.ReflectionUtils'.(æ‚8ıª¿Ÿ¿1
+H
+java:S1128"+Remove this unused import 'java.sql.Array'.(Õø‹ù8şª¿Ÿ¿1
+L
+java:S1128"*Remove this unused import 'java.util.Map'.(¼è½Òşÿÿÿÿ8€«¿Ÿ¿1
 Q
 java:S1068"/Remove this unused "modelMapper" private field.(«ŞËãşÿÿÿÿ8µ›§ü½1

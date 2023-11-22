@@ -97,8 +97,31 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void updateProductByFields(List<ProductToUpdate> productToUpdateList) {
+        log.info("### going to run the list ###");
 
+        for (ProductToUpdate productToUpdate : productToUpdateList) {
+            // Find the product in the database
+            Optional<Product> productOptional = repository.findById(productToUpdate.getId());
+            log.info("### called find by id ###");
+
+            if (productOptional.isPresent()) {
+                // Get the product
+                Product product = productOptional.get();
+                log.info("### found product ###");
+
+                // Update the productStock field
+                product.setProductStock(productToUpdate.getProductStock());
+                log.info("### updated product ###");
+
+                // Save the updated product back to the database
+                repository.save(product);
+                log.info("### save the product ###");
+            } else {
+                log.warn("Product with id " + productToUpdate.getId() + " not found");
+            }
+        }
     }
+
 
 
 }
