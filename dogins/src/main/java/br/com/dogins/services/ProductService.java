@@ -15,7 +15,6 @@ public interface ProductService {
 
     Integer getProductQuantity(String id);
 
-    String patchProductQuantity(String id, String qtdToDelete);
 
     void updateProductByFields(List<ProductToUpdate> productToUpdateList);
 
