@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-DoginsApplication<dogins>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "br.com.dogins.DoginsApplication",
+            "projectName": "dogins",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

@@ -23,7 +23,7 @@ public class Product {
     private String universalProductCode;
     private String productColor;
     private String productDescription;
-    private List<Binary> productImages;
+    private List<String> productImages;
     private String brandName;
     private String productWeight;
     private String productPrice;

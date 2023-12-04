@@ -15,7 +15,7 @@ public class ProductResponseDto {
     String id;
     String productColor;
     String productDescription;
-    List<Binary> productImages;
+    List<String> productImages;
     String brandName;
     Double productPrice;
     Integer productStock;
