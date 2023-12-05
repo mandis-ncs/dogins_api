@@ -1,6 +1,0 @@
-
-v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ğ®—²8ˆàåÊ¿1
-k
-java:S36551"NCall "product.isPresent()" or "!product.isEmpty()" before accessing the value.(»û„é8¨àåÊ¿1
-Q
-java:S1068"/Remove this unused "modelMapper" private field.(«ŞËãşÿÿÿÿ8¿àåÊ¿1

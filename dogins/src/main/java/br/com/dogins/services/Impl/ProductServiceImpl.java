@@ -8,7 +8,9 @@ import br.com.dogins.models.Product;
 import br.com.dogins.models.ProductToUpdate;
 import br.com.dogins.models.ShoppingCart;
 import br.com.dogins.repositories.ProductRepository;
+import br.com.dogins.repositories.ShoppingCartRepository;
 import br.com.dogins.services.ProductService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -24,11 +26,15 @@ import java.util.Optional;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository repository;
+
+    private final ShoppingCartRepository shoppingCartRepository;
+
     private final ModelMapper modelMapper;
 
-    public ProductServiceImpl(ProductRepository repository, ModelMapper modelMapper) {
+    public ProductServiceImpl(ProductRepository repository, ModelMapper modelMapper, ShoppingCartRepository shoppingCartRepository) {
         this.repository = repository;
         this.modelMapper = modelMapper;
+        this.shoppingCartRepository = shoppingCartRepository;
     }
 
     @Override
@@ -92,17 +98,12 @@ public class ProductServiceImpl implements ProductService {
 
         for (ProductToUpdate productToUpdate : productToUpdateList) {
             Optional<Product> productOptional = repository.findById(productToUpdate.getId());
-            log.info("### called find by id ###");
 
             if (productOptional.isPresent()) {
                 Product product = productOptional.get();
-                log.info("### found product ###");
 
                 product.setProductStock(productToUpdate.getQuantityPicked());
-                log.info("### updated product ###");
-
                 repository.save(product);
-                log.info("### save the product ###");
             } else {
                 log.warn("Product with id " + productToUpdate.getId() + " not found");
                 throw new ResourceNotFoundException("Produto não encontrado com id = " + productToUpdate.getId());
@@ -111,11 +112,18 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Item> postInShoppingCart(List<Item> shoppingCartProductList) {
-        //guardar lista no Shopping Cart
-        //
-    return null;
+    public List<Item> postInShoppingCart(List<Item> shoppingCartItemsList) {
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setItemList(shoppingCartItemsList);
+        shoppingCartRepository.save(shoppingCart);
+
+        ShoppingCart savedShoppingCart = shoppingCartRepository.findById(shoppingCart.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("ShoppingCart was empty or did not exist"));
+
+        return savedShoppingCart.getItemList();
     }
+
+
 
 
 }

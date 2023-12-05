@@ -49,8 +49,8 @@ public class ProductController {
 
     @PostMapping("/shopping-cart")
     public ResponseEntity<List<Item>> createShoppingCart(@RequestBody List<Item> shoppingCartItensList){
-        service.postInShoppingCart(shoppingCartItensList);
-        return ResponseEntity.ok().build();
+        var response = service.postInShoppingCart(shoppingCartItensList);
+        return ResponseEntity.ok(response);
     }
 
     // receber uma list com itens, guardar no carrinho

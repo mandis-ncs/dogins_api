@@ -19,6 +19,6 @@ public interface ProductService {
 
     void updateProductByFields(List<ProductToUpdate> productToUpdateList);
 
-    List<Item> postInShoppingCart(List<Item> shoppingCartProductList);
+    List<Item> postInShoppingCart(List<Item> shoppingCartItensList);
 
 }
