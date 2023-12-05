@@ -1,6 +1,7 @@
 package br.com.dogins.controllers;
 
 import br.com.dogins.dto.response.ProductResponseDto;
+import br.com.dogins.models.Item;
 import br.com.dogins.models.Product;
 import br.com.dogins.models.ProductToUpdate;
 import br.com.dogins.services.ProductService;
@@ -39,19 +40,20 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-//    @PatchMapping("/{id}")
-//    public ResponseEntity<String> patchProductQuantity(@PathVariable String id, String qtdToDelete) {
-//        String newQuantity = service.patchProductQuantity(id, qtdToDelete);
-//        return ResponseEntity.ok(newQuantity);
+
+//    @PatchMapping                                                   //List de Update e fields
+//    public ResponseEntity<Void> updateProductFields(@RequestBody List<ProductToUpdate> productToUpdateList){
+//        service.updateProductByFields(productToUpdateList);
+//        return ResponseEntity.ok().build();
 //    }
 
-    @PatchMapping                                                   //List de Update e fields
-    public ResponseEntity<Void> updateProductFields(@RequestBody List<ProductToUpdate> productToUpdateList){
-        service.updateProductByFields(productToUpdateList);
+    @PostMapping("/shopping-cart")
+    public ResponseEntity<List<Item>> createShoppingCart(@RequestBody List<Item> shoppingCartItensList){
+        service.postInShoppingCart(shoppingCartItensList);
         return ResponseEntity.ok().build();
     }
 
-    // receber uma list com ids e qtde  para fazer o patch
-    // for each -> fzr o patch
+    // receber uma list com itens, guardar no carrinho
+    // esperar confirm para deletar dados do carrinho -> update da qtde (na api) - reload quantity
 
 }

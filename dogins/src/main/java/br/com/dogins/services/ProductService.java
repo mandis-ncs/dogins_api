@@ -1,8 +1,10 @@
 package br.com.dogins.services;
 
 import br.com.dogins.dto.response.ProductResponseDto;
+import br.com.dogins.models.Item;
 import br.com.dogins.models.Product;
 import br.com.dogins.models.ProductToUpdate;
+import br.com.dogins.models.ShoppingCart;
 import org.bson.types.ObjectId;
 
 import java.util.List;
@@ -15,7 +17,8 @@ public interface ProductService {
 
     Integer getProductQuantity(String id);
 
-
     void updateProductByFields(List<ProductToUpdate> productToUpdateList);
+
+    List<Item> postInShoppingCart(List<Item> shoppingCartProductList);
 
 }

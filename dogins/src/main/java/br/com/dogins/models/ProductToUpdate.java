@@ -13,5 +13,5 @@ public class ProductToUpdate {
 
     @Id
     private String id;
-    private String productStock;
+    private String quantityPicked;
 }

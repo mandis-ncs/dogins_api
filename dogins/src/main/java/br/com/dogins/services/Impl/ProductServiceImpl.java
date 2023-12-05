@@ -1,11 +1,12 @@
 package br.com.dogins.services.Impl;
 
 import br.com.dogins.dto.response.ProductResponseDto;
-import br.com.dogins.exceptions.InvalidValue;
 import br.com.dogins.exceptions.ListIsEmptyException;
 import br.com.dogins.exceptions.ResourceNotFoundException;
+import br.com.dogins.models.Item;
 import br.com.dogins.models.Product;
 import br.com.dogins.models.ProductToUpdate;
+import br.com.dogins.models.ShoppingCart;
 import br.com.dogins.repositories.ProductRepository;
 import br.com.dogins.services.ProductService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,13 +14,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import org.springframework.util.ReflectionUtils;
-
-import java.lang.reflect.Field;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -102,7 +98,7 @@ public class ProductServiceImpl implements ProductService {
                 Product product = productOptional.get();
                 log.info("### found product ###");
 
-                product.setProductStock(productToUpdate.getProductStock());
+                product.setProductStock(productToUpdate.getQuantityPicked());
                 log.info("### updated product ###");
 
                 repository.save(product);
@@ -114,6 +110,12 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    @Override
+    public List<Item> postInShoppingCart(List<Item> shoppingCartProductList) {
+        //guardar lista no Shopping Cart
+        //
+    return null;
+    }
 
 
 }
