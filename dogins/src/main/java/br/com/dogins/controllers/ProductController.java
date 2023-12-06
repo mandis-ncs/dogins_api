@@ -83,4 +83,11 @@ public class ProductController {
         var response = shoppingCartService.findAllItemsInShoppingCart();
         return ResponseEntity.ok(response);
     }
+
+    //http://localhost:8080/dogins/shopping-cart/item/656d4191ab73ee5765012ead
+    @DeleteMapping("/shopping-cart/item/{id}")
+    public ResponseEntity<Void> deleteItemInShoppingCart(@PathVariable String id) {
+        shoppingCartService.deleteItemInShoppingCart(id);
+        return ResponseEntity.ok().build();
+    }
 }

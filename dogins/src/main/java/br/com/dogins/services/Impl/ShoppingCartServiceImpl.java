@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,6 +74,34 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             items.addAll(cart.getItemList());
         }
         return items;
+    }
+
+    @Override
+    public void deleteItemInShoppingCart(String itemId) {
+        List<ShoppingCart> carts = shoppingCartRepository.findAll();
+
+        if (carts.isEmpty()) {
+            throw new RuntimeException("O carrinho de compras está vazio!");
+        }
+
+        findItemInShoppingCartLists(carts, itemId);
+    }
+
+    private void findItemInShoppingCartLists(List<ShoppingCart> carts, String itemId) {
+        for (ShoppingCart cart : carts) {
+            Iterator<Item> iterator = cart.getItemList().iterator();
+            while (iterator.hasNext()) {
+                Item item = iterator.next();
+                if (item.getId().equals(itemId)) {
+                    // Remove o item da lista
+                    iterator.remove();
+                    shoppingCartRepository.save(cart);
+                    return;
+                }
+            }
+        }
+
+        throw new RuntimeException("Item com ID " + itemId + " não encontrado no carrinho de compras!");
     }
 
 

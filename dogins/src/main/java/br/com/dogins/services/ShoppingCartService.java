@@ -12,4 +12,6 @@ public interface ShoppingCartService {
 
     List<Item> findAllItemsInShoppingCart();
 
+    void deleteItemInShoppingCart(String itemId);
+
 }
