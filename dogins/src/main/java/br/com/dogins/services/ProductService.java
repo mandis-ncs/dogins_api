@@ -17,7 +17,7 @@ public interface ProductService {
 
     Integer getProductQuantity(String id);
 
-    void updateProductByFields(List<ProductToUpdate> productToUpdateList);
+    String updateProductByFields(Boolean purchaseIsConfirmed);
 
     List<Item> postInShoppingCart(List<Item> shoppingCartItensList);
 

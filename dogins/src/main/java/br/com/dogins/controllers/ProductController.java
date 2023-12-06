@@ -41,11 +41,11 @@ public class ProductController {
     }
 
 
-//    @PatchMapping                                                   //List de Update e fields
-//    public ResponseEntity<Void> updateProductFields(@RequestBody List<ProductToUpdate> productToUpdateList){
-//        service.updateProductByFields(productToUpdateList);
-//        return ResponseEntity.ok().build();
-//    }
+    @PatchMapping("/{purchaseIsConfirmed}")
+    public ResponseEntity<String> shoppingCartConfirmed(@PathVariable Boolean purchaseIsConfirmed){
+        String response = service.updateProductByFields(purchaseIsConfirmed); //inside service call drop shopping cart
+        return ResponseEntity.ok(response);
+    }
 
     @PostMapping("/shopping-cart")
     public ResponseEntity<List<Item>> createShoppingCart(@RequestBody List<Item> shoppingCartItensList){

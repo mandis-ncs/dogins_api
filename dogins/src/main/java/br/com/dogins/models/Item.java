@@ -1,5 +1,6 @@
 package br.com.dogins.models;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -17,14 +18,12 @@ public class Item {
 
     @Id
     private String id;
-    private String productCategory;
-    private String productColor;
-    private String productDescription;
-    private List<String> productImages;
-    private List<String> brandName;
-    private Double productPrice; //have to convert to string
-    private Integer productStock; //have to convert to string
-    private String size;
-    private String productName;
+    private List<String> image;
+    private String title;
+    private Double discount;
+    private Integer inStock;
+    private Integer quantity;
+    private Double price;
+    private Double total;
 
 }

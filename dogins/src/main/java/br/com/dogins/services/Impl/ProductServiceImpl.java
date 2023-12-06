@@ -2,6 +2,7 @@ package br.com.dogins.services.Impl;
 
 import br.com.dogins.dto.response.ProductResponseDto;
 import br.com.dogins.exceptions.ListIsEmptyException;
+import br.com.dogins.exceptions.PurchaseFailedException;
 import br.com.dogins.exceptions.ResourceNotFoundException;
 import br.com.dogins.models.Item;
 import br.com.dogins.models.Product;
@@ -46,29 +47,6 @@ public class ProductServiceImpl implements ProductService {
         return mapToProductResponseDto(product);
     }
 
-    private ProductResponseDto mapToProductResponseDto(Optional<Product> product) {
-        ProductResponseDto productResponseDto = new ProductResponseDto();
-        productResponseDto.setId(product.get().getId());
-        productResponseDto.setProductColor(product.get().getProductColor());
-        productResponseDto.setProductDescription(product.get().getProductDescription());
-        productResponseDto.setProductImages(product.get().getProductImages());
-        productResponseDto.setBrandName(product.get().getBrandName());
-        productResponseDto.setSize(product.get().getSize());
-        productResponseDto.setProductName(product.get().getProductName());
-
-        //convert string price to double
-        productResponseDto.setProductPrice(convertStrToDouble(product.get().getProductPrice()));
-        productResponseDto.setProductStock(Integer.parseInt(product.get().getProductStock()));
-        return productResponseDto;
-    }
-
-    private Double convertStrToDouble(String str) {
-        // Convert string to double, handling commas
-        String strWithoutComma = str.replace(",", ".");
-        return Double.parseDouble(strWithoutComma);
-    }
-
-
     @Override
     public List<ProductResponseDto> findAllProducts() {
         var productList = repository.findAll();
@@ -94,21 +72,44 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public void updateProductByFields(List<ProductToUpdate> productToUpdateList) {
+    public String updateProductByFields(Boolean purchaseIsConfirmed) {
 
-        for (ProductToUpdate productToUpdate : productToUpdateList) {
-            Optional<Product> productOptional = repository.findById(productToUpdate.getId());
+        if (purchaseIsConfirmed == false) {
+            throw new PurchaseFailedException("Your purchase was denied! Please try again later.");
+        }
 
-            if (productOptional.isPresent()) {
-                Product product = productOptional.get();
+        List<ShoppingCart> savedShoppingCartList = shoppingCartRepository.findAll();
 
-                product.setProductStock(productToUpdate.getQuantityPicked());
+        if(savedShoppingCartList.isEmpty()) {
+            throw new ListIsEmptyException("Shopping cart not found.");
+        }
+
+        //new method
+        for (ShoppingCart savedShoppingCart : savedShoppingCartList) {
+            List<Item> listOfItensInShoppingCart = savedShoppingCart.getItemList();
+
+            for (Item item : listOfItensInShoppingCart) {
+
+                //stock - quantity new method
+                //quantity has to be above inStock
+                Integer newQuantityInStock = item.getInStock() - item.getQuantity();
+
+                //get product with item id
+                ProductResponseDto productResponseDto = findProductById(item.getId());
+                if (productResponseDto == null) {
+                    throw new ResourceNotFoundException("Product not found with id: " + item.getId());
+                }
+
+                //convert int to string, set stock of product, save
+                Product product = mapToProduct(productResponseDto);
+                product.setProductStock(newQuantityInStock.toString());
                 repository.save(product);
-            } else {
-                log.warn("Product with id " + productToUpdate.getId() + " not found");
-                throw new ResourceNotFoundException("Produto não encontrado com id = " + productToUpdate.getId());
             }
         }
+
+        //delete shopping cart
+        shoppingCartRepository.deleteAll();
+        return "Your purchase was confirmed!";
     }
 
     @Override
@@ -118,11 +119,50 @@ public class ProductServiceImpl implements ProductService {
         shoppingCartRepository.save(shoppingCart);
 
         ShoppingCart savedShoppingCart = shoppingCartRepository.findById(shoppingCart.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("ShoppingCart was empty or did not exist"));
+                .orElseThrow(() -> new ListIsEmptyException("ShoppingCart was empty or did not exist"));
 
         return savedShoppingCart.getItemList();
     }
 
+
+    private ProductResponseDto mapToProductResponseDto(Optional<Product> product) {
+        ProductResponseDto productResponseDto = new ProductResponseDto();
+        productResponseDto.setId(product.get().getId());
+        productResponseDto.setProductColor(product.get().getProductColor());
+        productResponseDto.setProductDescription(product.get().getProductDescription());
+        productResponseDto.setProductImages(product.get().getProductImages());
+        productResponseDto.setBrandName(product.get().getBrandName());
+        productResponseDto.setSize(product.get().getSize());
+        productResponseDto.setProductName(product.get().getProductName());
+
+        //convert string price to double
+        productResponseDto.setProductPrice(convertStrToDouble(product.get().getProductPrice()));
+        productResponseDto.setProductStock(Integer.parseInt(product.get().getProductStock()));
+        return productResponseDto;
+    }
+
+    private Product mapToProduct(ProductResponseDto productResponseDto) {
+        Product product = new Product();
+        product.setId(productResponseDto.getId());
+        product.setProductColor(productResponseDto.getProductColor());
+        product.setProductDescription(productResponseDto.getProductDescription());
+        product.setProductImages(productResponseDto.getProductImages());
+        product.setBrandName(productResponseDto.getBrandName());
+        product.setSize(productResponseDto.getSize());
+        product.setProductName(productResponseDto.getProductName());
+
+        //convert double price to string
+        product.setProductPrice(Double.toString(productResponseDto.getProductPrice()));
+        product.setProductStock(Integer.toString(productResponseDto.getProductStock()));
+        return product;
+    }
+
+
+    private Double convertStrToDouble(String str) {
+        // Convert string to double, handling commas
+        String strWithoutComma = str.replace(",", ".");
+        return Double.parseDouble(strWithoutComma);
+    }
 
 
 
