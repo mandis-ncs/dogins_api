@@ -8,4 +8,8 @@ public interface ShoppingCartService {
 
     List<Item> postInShoppingCart(List<Item> shoppingCartItensList);
 
+    Item findItemByIdInShoppingCart(String ItemId);
+
+    List<Item> findAllItemsInShoppingCart();
+
 }

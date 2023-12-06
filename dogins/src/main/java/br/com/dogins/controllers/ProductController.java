@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/dogins/products")
+@RequestMapping("/dogins")
 public class ProductController {
 
     private ProductService service;
@@ -29,21 +29,21 @@ public class ProductController {
     //############## PRODUCT STOCK ENDPOINTS ##############
 
     //http://localhost:8080/dogins/products/656d4191ab73ee5765012ead
-    @GetMapping("/{id}")
+    @GetMapping("/products/{id}")
     public ResponseEntity<ProductResponseDto> findById(@PathVariable String id) {
         var response = service.findProductById(id);
         return ResponseEntity.ok(response);
     }
 
     //http://localhost:8080/dogins/products
-    @GetMapping
+    @GetMapping("/products")
     public ResponseEntity<List<ProductResponseDto>> findAll() {
         var response = service.findAllProducts();
         return ResponseEntity.ok(response);
     }
 
     //http://localhost:8080/dogins/products/656d4191ab73ee5765012ead/quantity
-    @GetMapping("/{id}/quantity")
+    @GetMapping("/products/{id}/quantity")
     public ResponseEntity<Integer> getProductQuantity(@PathVariable String id) {
         var response = service.getProductQuantity(id);
         return ResponseEntity.ok(response);
@@ -52,7 +52,7 @@ public class ProductController {
     //############## SHOPPING CART AND PRODUCT STOCK ENDPOINT ##############
     //http://localhost:8080/dogins/products/true
     //call when pressed and confirmed purchase in shopping cart
-    @PatchMapping("/{purchaseIsConfirmed}")
+    @PatchMapping("/products/{purchaseIsConfirmed}")
     public ResponseEntity<String> shoppingCartConfirmed(@PathVariable Boolean purchaseIsConfirmed){
         String response = service.updateProductByFields(purchaseIsConfirmed); //inside service call drop shopping cart
         return ResponseEntity.ok(response);
@@ -60,7 +60,7 @@ public class ProductController {
 
     //############## SHOPPING CART ENDPOINTS ##############
 
-    //http://localhost:8080/dogins/products/shopping-cart
+    //http://localhost:8080/dogins/shopping-cart
     //call when adding products to shopping cart
     @PostMapping("/shopping-cart")
     public ResponseEntity<List<Item>> createShoppingCart(@RequestBody List<Item> shoppingCartItensList){
@@ -70,4 +70,17 @@ public class ProductController {
 
     //post (ja tem), get all e get by ids, delete item from shopping cart
 
+    //http://localhost:8080/dogins/shopping-cart/item/656d4191ab73ee5765012ead
+    @GetMapping("/shopping-cart/item/{id}") //Item ID
+    public ResponseEntity<Item> findItemByIdInShoppingCart(@PathVariable String id) {
+        var response = shoppingCartService.findItemByIdInShoppingCart(id);
+        return ResponseEntity.ok(response);
+    }
+
+    //http://localhost:8080/dogins/shopping-cart
+    @GetMapping("/shopping-cart")
+    public ResponseEntity<List<Item>> findAllItemsInShoppingCart() {
+        var response = shoppingCartService.findAllItemsInShoppingCart();
+        return ResponseEntity.ok(response);
+    }
 }

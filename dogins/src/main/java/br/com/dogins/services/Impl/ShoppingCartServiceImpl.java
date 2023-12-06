@@ -1,6 +1,7 @@
 package br.com.dogins.services.Impl;
 
 import br.com.dogins.exceptions.ListIsEmptyException;
+import br.com.dogins.exceptions.ResourceNotFoundException;
 import br.com.dogins.models.Item;
 import br.com.dogins.models.ShoppingCart;
 import br.com.dogins.repositories.ProductRepository;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -38,6 +40,28 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         shoppingCartRepository.save(shoppingCart);
 
         return itemList;
+    }
+
+    @Override
+    public Item findItemByIdInShoppingCart(String itemId) {
+        log.info("findItemById called");
+        List<ShoppingCart> shoppingCarts = shoppingCartRepository.findAll();
+        if (shoppingCarts.isEmpty()) {
+            throw new ListIsEmptyException("No shopping carts found!");
+        }
+        for (ShoppingCart shoppingCart : shoppingCarts) {
+            for (Item item : shoppingCart.getItemList()) {
+                if (item.getId().equals(itemId)) {
+                    return item;
+                }
+            }
+        }
+        throw new ResourceNotFoundException("This item id does not exist: " + itemId);
+    }
+
+    @Override
+    public List<Item> findAllItemsInShoppingCart() {
+        return null;
     }
 
     private ShoppingCart getExistingOrNewShoppingCart() {
