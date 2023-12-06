@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,14 +30,31 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public List<Item> postInShoppingCart(List<Item> shoppingCartItemsList) {
         log.info("postInShoppingCart called");
-        ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.setItemList(shoppingCartItemsList);
+
+        // Tenta encontrar um carrinho de compras existente
+        List<ShoppingCart> shoppingCarts = shoppingCartRepository.findAll();
+        ShoppingCart shoppingCart;
+        if (!shoppingCarts.isEmpty()) {
+            // Se existir, pega o primeiro carrinho de compras
+            shoppingCart = shoppingCarts.get(0);
+        } else {
+            // Se não existir, cria um novo carrinho de compras
+            shoppingCart = new ShoppingCart();
+        }
+
+        // Adiciona os novos itens à lista de itens do carrinho de compras
+        List<Item> itemList = shoppingCart.getItemList();
+        if (itemList == null) {
+            itemList = new ArrayList<>();
+        }
+        itemList.addAll(shoppingCartItemsList);
+        shoppingCart.setItemList(itemList);
+
+        // Salva o carrinho de compras atualizado
         shoppingCartRepository.save(shoppingCart);
 
-        ShoppingCart savedShoppingCart = shoppingCartRepository.findById(shoppingCart.getId())
-                .orElseThrow(() -> new ListIsEmptyException("ShoppingCart was empty or did not exist"));
-
-        return savedShoppingCart.getItemList();
+        return itemList;
     }
+
 
 }

@@ -68,4 +68,6 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
+    //post (ja tem), get all e get by ids, delete item from shopping cart
+
 }
