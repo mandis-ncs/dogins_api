@@ -19,6 +19,4 @@ public interface ProductService {
 
     String updateProductByFields(Boolean purchaseIsConfirmed);
 
-    List<Item> postInShoppingCart(List<Item> shoppingCartItensList);
-
 }

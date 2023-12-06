@@ -30,16 +30,14 @@ public class ProductServiceImpl implements ProductService {
 
     private final ShoppingCartRepository shoppingCartRepository;
 
-    private final ModelMapper modelMapper;
-
-    public ProductServiceImpl(ProductRepository repository, ModelMapper modelMapper, ShoppingCartRepository shoppingCartRepository) {
+    public ProductServiceImpl(ProductRepository repository, ShoppingCartRepository shoppingCartRepository) {
         this.repository = repository;
-        this.modelMapper = modelMapper;
         this.shoppingCartRepository = shoppingCartRepository;
     }
 
     @Override
     public ProductResponseDto findProductById(String id) {
+        log.info("findProductById called");
         Optional<Product> product = repository.findById(id);
         if (product.isEmpty()) {
             throw new ResourceNotFoundException("This product id does not exist: " + id);
@@ -49,6 +47,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductResponseDto> findAllProducts() {
+        log.info("findAllProducts called");
         var productList = repository.findAll();
         if (productList.isEmpty()) {
             throw new ListIsEmptyException("No products found!");
@@ -65,15 +64,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Integer getProductQuantity(String id) {
+        log.info("getProductQuantity called");
         ProductResponseDto responseDto = findProductById(id);
         return Integer.parseInt(String.valueOf(responseDto.getProductStock()));
     }
 
 
-
     @Override
     public String updateProductByFields(Boolean purchaseIsConfirmed) {
-
+        log.info("updateProductByFields called");
         if (purchaseIsConfirmed == false) {
             throw new PurchaseFailedException("Your purchase was denied! Please try again later.");
         }
@@ -84,53 +83,12 @@ public class ProductServiceImpl implements ProductService {
             throw new ListIsEmptyException("Shopping cart not found.");
         }
 
-        //new method
-        for (ShoppingCart savedShoppingCart : savedShoppingCartList) {
-            List<Item> listOfItensInShoppingCart = savedShoppingCart.getItemList();
-
-            for (Item item : listOfItensInShoppingCart) {
-                log.info("percorrendo lista carrinho");
-
-                //stock - quantity new method
-                //quantity has to be above inStock
-                Integer newQuantityInStock = item.getInStock() - item.getQuantity();
-                log.info("calculo ok");
-
-                //get product with item id
-                String id = item.getId().toString();
-                log.info("convertendo item id para string");
-
-                ProductResponseDto productResponseDto = findProductById(id);
-                if (productResponseDto == null) {
-                    throw new ResourceNotFoundException("Product not found with id: " + item.getId());
-                }
-                log.info("produto encontrado com id do item");
-
-                //convert int to string, set stock of product, save
-                Product product = mapToProduct(productResponseDto);
-                log.info("map ok");
-                product.setProductStock(newQuantityInStock.toString());
-                log.info("quantidade mudada");
-                repository.save(product);
-                log.info("salvo");
-            }
-        }
+        //update product collection in database with the information of the items in shopping cart
+        updateDatabaseWithShoppingCart(savedShoppingCartList);
 
         //delete shopping cart
         shoppingCartRepository.deleteAll();
         return "Your purchase was confirmed!";
-    }
-
-    @Override
-    public List<Item> postInShoppingCart(List<Item> shoppingCartItemsList) {
-        ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.setItemList(shoppingCartItemsList);
-        shoppingCartRepository.save(shoppingCart);
-
-        ShoppingCart savedShoppingCart = shoppingCartRepository.findById(shoppingCart.getId())
-                .orElseThrow(() -> new ListIsEmptyException("ShoppingCart was empty or did not exist"));
-
-        return savedShoppingCart.getItemList();
     }
 
 
@@ -173,6 +131,26 @@ public class ProductServiceImpl implements ProductService {
         return Double.parseDouble(strWithoutComma);
     }
 
+    private void updateDatabaseWithShoppingCart (List<ShoppingCart> savedShoppingCartList) {
+        for (ShoppingCart savedShoppingCart : savedShoppingCartList) {
+            List<Item> listOfItensInShoppingCart = savedShoppingCart.getItemList();
+
+            for (Item item : listOfItensInShoppingCart) {
+                Integer newQuantityInStock = item.getInStock() - item.getQuantity();
+
+                //get product with item id
+                String id = item.getId().toString();
+                ProductResponseDto productResponseDto = findProductById(id);
+                if (productResponseDto == null) {
+                    throw new ResourceNotFoundException("Product not found with id: " + item.getId());
+                }
+
+                Product product = mapToProduct(productResponseDto);
+                product.setProductStock(newQuantityInStock.toString());
+                repository.save(product);
+            }
+        }
+    }
 
 
 }
