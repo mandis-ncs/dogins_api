@@ -44,10 +44,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public Item findItemByIdInShoppingCart(String itemId) {
-        log.info("findItemById called");
+        log.info("findItemByIdInShoppingCart called");
         List<ShoppingCart> shoppingCarts = shoppingCartRepository.findAll();
         if (shoppingCarts.isEmpty()) {
-            throw new ListIsEmptyException("No shopping carts found!");
+            throw new ListIsEmptyException("Seu carrinho está vazio.");
         }
         for (ShoppingCart shoppingCart : shoppingCarts) {
             for (Item item : shoppingCart.getItemList()) {
@@ -56,13 +56,25 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 }
             }
         }
-        throw new ResourceNotFoundException("This item id does not exist: " + itemId);
+        throw new ResourceNotFoundException("Item não encontrado no seu Carrinho com id: " + itemId);
     }
 
     @Override
     public List<Item> findAllItemsInShoppingCart() {
-        return null;
+        log.info("findAllItemsInShoppingCart called");
+        List<ShoppingCart> carts = shoppingCartRepository.findAll();
+
+        if (carts.isEmpty()) {
+            throw new ListIsEmptyException("O carrinho de compras está vazio!");
+        }
+
+        List<Item> items = new ArrayList<>();
+        for (ShoppingCart cart : carts) {
+            items.addAll(cart.getItemList());
+        }
+        return items;
     }
+
 
     private ShoppingCart getExistingOrNewShoppingCart() {
         List<ShoppingCart> shoppingCarts = shoppingCartRepository.findAll();
