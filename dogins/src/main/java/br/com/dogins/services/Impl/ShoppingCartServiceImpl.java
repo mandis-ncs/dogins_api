@@ -31,43 +31,45 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public List<Item> postInShoppingCart(List<Item> shoppingCartItemsList) {
         log.info("postInShoppingCart called");
 
-        // Tenta encontrar um carrinho de compras existente
-        List<ShoppingCart> shoppingCarts = shoppingCartRepository.findAll();
-        ShoppingCart shoppingCart;
-        if (!shoppingCarts.isEmpty()) {
-            // Se existir, pega o primeiro carrinho de compras
-            shoppingCart = shoppingCarts.get(0);
-        } else {
-            // Se não existir, cria um novo carrinho de compras
-            shoppingCart = new ShoppingCart();
-        }
+        ShoppingCart shoppingCart = getExistingOrNewShoppingCart();
+        List<Item> itemList = getUpdatedItemList(shoppingCart, shoppingCartItemsList);
 
-        // Adiciona os novos itens à lista de itens do carrinho de compras
+        shoppingCart.setItemList(itemList);
+        shoppingCartRepository.save(shoppingCart);
+
+        return itemList;
+    }
+
+    private ShoppingCart getExistingOrNewShoppingCart() {
+        List<ShoppingCart> shoppingCarts = shoppingCartRepository.findAll();
+        if (!shoppingCarts.isEmpty()) {
+            return shoppingCarts.get(0);
+        } else {
+            return new ShoppingCart();
+        }
+    }
+
+    private List<Item> getUpdatedItemList(ShoppingCart shoppingCart, List<Item> newItems) {
         List<Item> itemList = shoppingCart.getItemList();
         if (itemList == null) {
             itemList = new ArrayList<>();
         }
 
-        for (Item newItem : shoppingCartItemsList) {
-            boolean itemExists = false;
-            for (int i = 0; i < itemList.size(); i++) {
-                if (itemList.get(i).getId().equals(newItem.getId())) {
-                    itemList.set(i, newItem); // Substitui o item existente pelo novo item
-                    itemExists = true;
-                    break;
-                }
-            }
-            if (!itemExists) {
-                itemList.add(newItem); // Adiciona o novo item se ele não existir na lista
-            }
+        for (Item newItem : newItems) {
+            updateOrAddItem(itemList, newItem);
         }
 
-        shoppingCart.setItemList(itemList);
-
-        // Salva o carrinho de compras atualizado
-        shoppingCartRepository.save(shoppingCart);
-
         return itemList;
+    }
+
+    private void updateOrAddItem(List<Item> itemList, Item newItem) {
+        for (int i = 0; i < itemList.size(); i++) {
+            if (itemList.get(i).getId().equals(newItem.getId())) {
+                itemList.set(i, newItem);
+                return;
+            }
+        }
+        itemList.add(newItem);
     }
 
 
