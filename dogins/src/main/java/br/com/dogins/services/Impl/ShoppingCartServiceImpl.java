@@ -47,7 +47,21 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         if (itemList == null) {
             itemList = new ArrayList<>();
         }
-        itemList.addAll(shoppingCartItemsList);
+
+        for (Item newItem : shoppingCartItemsList) {
+            boolean itemExists = false;
+            for (int i = 0; i < itemList.size(); i++) {
+                if (itemList.get(i).getId().equals(newItem.getId())) {
+                    itemList.set(i, newItem); // Substitui o item existente pelo novo item
+                    itemExists = true;
+                    break;
+                }
+            }
+            if (!itemExists) {
+                itemList.add(newItem); // Adiciona o novo item se ele não existir na lista
+            }
+        }
+
         shoppingCart.setItemList(itemList);
 
         // Salva o carrinho de compras atualizado
@@ -55,6 +69,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         return itemList;
     }
+
 
 
 }
