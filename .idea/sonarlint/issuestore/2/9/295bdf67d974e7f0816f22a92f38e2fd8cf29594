@@ -1,0 +1,10 @@
+
+E
+java:S5411L"(Use a primitive boolean expression here.(–›åñ8°Ò ëÃ1
+v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ğ®—²8ÄÒ ëÃ1
+k
+java:S3655a"NCall "product.isPresent()" or "!product.isEmpty()" before accessing the value.(»û„é8ØÖ²ëÃ1
+D
+java:S1125L"'Remove the unnecessary boolean literal.(–›åñ8äÒ ëÃ1
+]
+java:S1858"?"getId" returns a string, there's no need to call "toString()".(¦àÕ—8êÒ ëÃ1
