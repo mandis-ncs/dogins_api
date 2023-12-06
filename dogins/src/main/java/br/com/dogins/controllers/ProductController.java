@@ -40,13 +40,14 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-
+    //call when pressed and confirmed purchase in shopping cart
     @PatchMapping("/{purchaseIsConfirmed}")
     public ResponseEntity<String> shoppingCartConfirmed(@PathVariable Boolean purchaseIsConfirmed){
         String response = service.updateProductByFields(purchaseIsConfirmed); //inside service call drop shopping cart
         return ResponseEntity.ok(response);
     }
 
+    //call when adding products to shopping cart
     @PostMapping("/shopping-cart")
     public ResponseEntity<List<Item>> createShoppingCart(@RequestBody List<Item> shoppingCartItensList){
         var response = service.postInShoppingCart(shoppingCartItensList);

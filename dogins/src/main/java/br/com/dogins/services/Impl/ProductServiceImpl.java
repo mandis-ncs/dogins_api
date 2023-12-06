@@ -89,21 +89,30 @@ public class ProductServiceImpl implements ProductService {
             List<Item> listOfItensInShoppingCart = savedShoppingCart.getItemList();
 
             for (Item item : listOfItensInShoppingCart) {
+                log.info("percorrendo lista carrinho");
 
                 //stock - quantity new method
                 //quantity has to be above inStock
                 Integer newQuantityInStock = item.getInStock() - item.getQuantity();
+                log.info("calculo ok");
 
                 //get product with item id
-                ProductResponseDto productResponseDto = findProductById(item.getId());
+                String id = item.getId().toString();
+                log.info("convertendo item id para string");
+
+                ProductResponseDto productResponseDto = findProductById(id);
                 if (productResponseDto == null) {
                     throw new ResourceNotFoundException("Product not found with id: " + item.getId());
                 }
+                log.info("produto encontrado com id do item");
 
                 //convert int to string, set stock of product, save
                 Product product = mapToProduct(productResponseDto);
+                log.info("map ok");
                 product.setProductStock(newQuantityInStock.toString());
+                log.info("quantidade mudada");
                 repository.save(product);
+                log.info("salvo");
             }
         }
 
