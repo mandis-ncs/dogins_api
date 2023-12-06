@@ -68,7 +68,6 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-    //post (ja tem), get all e get by ids, delete item from shopping cart
 
     //http://localhost:8080/dogins/shopping-cart/item/656d4191ab73ee5765012ead
     @GetMapping("/shopping-cart/item/{id}") //Item ID
