@@ -26,6 +26,8 @@ public class ProductController {
         this.shoppingCartService = shoppingCartService;
     }
 
+
+
     //############## PRODUCT STOCK ENDPOINTS ##############
 
     //http://localhost:8080/dogins/products/656d4191ab73ee5765012ead
@@ -49,7 +51,10 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
+
+
     //############## SHOPPING CART AND PRODUCT STOCK ENDPOINT ##############
+
     //http://localhost:8080/dogins/products/true
     //call when pressed and confirmed purchase in shopping cart
     @PatchMapping("/products/{purchaseIsConfirmed}")
@@ -57,6 +62,8 @@ public class ProductController {
         String response = service.updateProductByFields(purchaseIsConfirmed); //inside service call drop shopping cart
         return ResponseEntity.ok(response);
     }
+
+
 
     //############## SHOPPING CART ENDPOINTS ##############
 
