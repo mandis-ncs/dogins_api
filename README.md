@@ -68,6 +68,35 @@ server.port = 8081
 
 <br>
 
+## EndPoints 🐶💙
+Se tiver o interesse de testar somente a API com auxílio do Postman ou Isomnia, use os comandos comentados acima de cada endpoint declarado no controller `ProductController` na pasta `dogins/src/main/java/br/com/dogins/controllers`.
+
+Para o endpoint POST do shopping Cart, use o seguinte corpo:
+```
+[
+    {
+        "id": "656d4191ab73ee5765012ead",
+        "image": ["iVBORw0"],
+        "title": "Brinquedo de Pelúcia Chalesco Tatu",
+        "discount": 0.0,
+        "inStock": 15,
+        "quantity": 1,
+        "price": 55.0,
+        "total": 55.0
+    },
+    {
+        "id": "643734c97f7b43ab29138190",
+        "image": ["iVBORw"],
+        "title": "Hemolitan Pet",
+        "discount": 0.0,
+        "inStock": 20,
+        "quantity": 1,
+        "price": 54.9,
+        "total": 54.9
+    }
+]
+```
+Obs: Os produtos acima são exemplos de produtos cadastrados automaticamente no database. Se outros ids forem adicionados no lugar do exemplo acima, os outros métodos serão afetados e irão cair em exceção. Sinta-se livre para testar.
 
 ## Nosso Team AUUdacioso 🐶💙
 You can see more about us in our profile:
